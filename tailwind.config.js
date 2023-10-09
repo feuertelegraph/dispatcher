@@ -5,6 +5,10 @@ module.exports = {
     "./templates/**/*.html.twig",
   ],
   theme: {
+    fontFamily: {
+      sans: ['Open Sans Variable', 'sans-serif'],
+      heading: ['Work Sans Variable', 'sans-serif']
+    },
     extend: {
       colors: {
         'dp-orange': {

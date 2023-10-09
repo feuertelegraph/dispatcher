@@ -7,3 +7,7 @@
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.sass';
+
+// fonts
+import '@fontsource-variable/work-sans';
+import '@fontsource-variable/open-sans';

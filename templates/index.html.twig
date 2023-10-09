@@ -10,11 +10,16 @@
                 </div>
             </div>
             <nav class="flex-1">
-                <ul>
-                    <li>Unternavigation</li>
-                    <li>Unternavigation</li>
-                    <li>Unternavigation</li>
-                    <li>Unternavigation</li>
+                <ul class="flex flex-col">
+                    <li class="px-2 py-3 leading-none border-b-2 border-b-gray-300">Unternavigation</li>
+                    <li class="px-2 py-3 leading-none border-b-2 border-b-gray-300">Unternavigation</li>
+                    <li class="py-1 px-2 border-b-2 border-b-gray-300">
+                        <div class="font-bold">Untermenu</div>
+                        <ul class="flex flex-col border-l-2 border-l-dp-orange bg-gray-300">
+                            <li class="p-2 border-b-gray-400 border-b-2">Unternavigation</li>
+                            <li class="p-2">Unternavigation</li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
             <footer class="p-2 bg-gray-300 text-black text-xs text-center">Version x.x.x - Stand: xx.xx.xxxx</footer>
@@ -22,10 +27,10 @@
 
         <div class="flex-1 min-h-screen flex flex-col min-w-0 overflow-auto ...">
             <div class="min-h-screen flex flex-col">
-                <header class="bg-gray-200 border-b-2 flex justify-between">
-                    <ul class="flex gap-4 items-stretch">
-                        <li class="block py-4">
-                            <a href="#">Active Item</a>
+                <header class="bg-gray-200 flex justify-between">
+                    <ul class="flex flex-row gap-4">
+                        <li>
+                            <a href="#" class="py-4 block font-bold text-dp-orange border-b-2 border-b-dp-orange">Active Item</a>
                         </li>
                         <li class="py-4">Item</li>
                         <li class="py-4">Item</li>
