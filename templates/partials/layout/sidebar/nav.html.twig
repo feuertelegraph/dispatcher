@@ -1,0 +1,53 @@
+{% set items = [{
+    'name': 'Item 1',
+    'type': 'link',
+    'path': '#',
+    'active': true
+}, {
+    'name': 'Item 2',
+    'type': 'link',
+    'path': '#',
+    'active': false
+}, {
+    'name': 'Submenu',
+    'type': 'menu',
+    'content': [{
+        'name': 'Item 1',
+        'type': 'link',
+        'path': '#',
+        'active': false
+    }, {
+        'name': 'Item 2',
+        'type': 'link',
+        'path': '#',
+        'active': false
+    }]
+}] %}
+{% set depth = depth|default(0) %}
+
+{% macro sidebarMenu(items, depth) %}
+    {% import _self as self %}
+    {% for item in items %}
+        {% if item.type == 'link' %}
+                <li>
+                    <a href="{{ item.path }}" class="block {% if item.active %}text-dp-orange font-bold{% endif %} {% if depth >= 1 %} bg-gray-300 border-b-gray-400 hover:bg-gray-400 {% else %} border-b-gray-300 hover:bg-gray-300 {% endif %} px-2 py-3 leading-none border-b-2">
+                        {{ item.name }}
+                    </a>
+                </li>
+        {% endif %}
+        {% if item.type == 'menu' %}
+            <li class="py-1 px-2 border-b-2 border-b-gray-300 bg-gray-300">
+                <div class="font-bold">{{ item.name }}</div>
+                {{ self.sidebarMenu(item.content, depth+1) }}
+            </li>
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
+
+{% from _self import sidebarMenu %}
+
+<nav class="flex-1">
+    <ul class="flex flex-col">
+        {{ sidebarMenu(items, depth) }}
+    </ul>
+</nav>

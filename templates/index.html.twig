@@ -3,39 +3,15 @@
 {% block body %}
     <div class="min-h-screen flex">
         <aside class="w-56 flex-none bg-gray-200 flex flex-col">
-            <div class="p-2 flex gap-2 justify-center items-center">
-                <div class="h-10 w-10 bg-black block"></div>
-                <div class="flex-1 mt-0.5 font-bold">
-                    Freiw. Feuerwehr Musterhausen
-                </div>
-            </div>
-            <nav class="flex-1">
-                <ul class="flex flex-col">
-                    <li class="px-2 py-3 leading-none border-b-2 border-b-gray-300">Unternavigation</li>
-                    <li class="px-2 py-3 leading-none border-b-2 border-b-gray-300">Unternavigation</li>
-                    <li class="py-1 px-2 border-b-2 border-b-gray-300">
-                        <div class="font-bold">Untermenu</div>
-                        <ul class="flex flex-col border-l-2 border-l-dp-orange bg-gray-300">
-                            <li class="p-2 border-b-gray-400 border-b-2">Unternavigation</li>
-                            <li class="p-2">Unternavigation</li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
-            <footer class="p-2 bg-gray-300 text-black text-xs text-center">Version x.x.x - Stand: xx.xx.xxxx</footer>
+            {% include 'partials/layout/sidebar/logo.html.twig' %}
+            {% include 'partials/layout/sidebar/nav.html.twig' %}
+            {% include 'partials/layout/sidebar/footer.html.twig' %}
         </aside>
 
         <div class="flex-1 min-h-screen flex flex-col min-w-0 overflow-auto ...">
             <div class="min-h-screen flex flex-col">
                 <header class="bg-gray-200 flex justify-between">
-                    <ul class="flex flex-row gap-4">
-                        <li>
-                            <a href="#" class="py-4 block font-bold text-dp-orange border-b-2 border-b-dp-orange">Active Item</a>
-                        </li>
-                        <li class="py-4">Item</li>
-                        <li class="py-4">Item</li>
-                        <li class="py-4">Item</li>
-                    </ul>
+                    {% include 'partials/layout/navbar/nav.html.twig' %}
                     <div class="p-4">
                         User
                     </div>

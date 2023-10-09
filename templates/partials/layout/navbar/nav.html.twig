@@ -1,0 +1,17 @@
+{% set items = [{
+    'name': 'Item 1',
+    'path': '#',
+    'active': true
+}, {
+    'name': 'Item 2',
+    'path': '#',
+    'active': false
+}] %}
+
+<ul class="flex flex-row gap-4">
+    {% for item in items %}
+        <li>
+            <a href="{{ item.path }}" class="{% if item.active %}text-dp-orange border-b-dp-orange{% endif %} hover:bg-gray-300 py-4 block font-bold border-b-2">{{ item.name }}</a>
+        </li>
+    {% endfor %}
+</ul>
