@@ -46,8 +46,12 @@
 
 {% from _self import sidebarMenu %}
 
-<nav class="flex-1">
-    <ul class="flex flex-col">
-        {{ sidebarMenu(items, depth) }}
-    </ul>
-</nav>
+<aside class="layout-sidenav flex flex-col md:min-h-full">
+    <nav class="flex-1">
+        <ul class="flex flex-col">
+            {{ sidebarMenu(items, depth) }}
+        </ul>
+    </nav>
+    <footer class="p-2 bg-gray-300 text-black text-xs text-center">Version x.x.x - Stand: xx.xx.xxxx</footer>
+</aside>
+

@@ -1,23 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="min-h-screen flex">
-        <aside class="w-56 flex-none bg-gray-200 flex flex-col">
-            {% include 'partials/layout/sidebar/logo.html.twig' %}
-            {% include 'partials/layout/sidebar/nav.html.twig' %}
-            {% include 'partials/layout/sidebar/footer.html.twig' %}
-        </aside>
-
-        <div class="flex-1 min-h-screen flex flex-col min-w-0 overflow-auto ...">
-            <div class="min-h-screen max-h-screen flex flex-col">
-                <header class="bg-gray-200 flex justify-between">
-                    {% include 'partials/layout/navbar/nav.html.twig' %}
-                    {% include 'partials/layout/navbar/profile.html.twig' %}
-                </header>
-                <main class="flex-1 overflow-y-scroll p-2">
-                    {% include 'partials/example.html.twig' %}
-                </main>
-            </div>
-        </div>
+    <div class="layout-grid">
+        {% include 'partials/layout/logo.html.twig' %}
+        {% include 'partials/layout/topnav.html.twig' %}
+        {% include 'partials/layout/profile.html.twig' %}
+        {% include 'partials/layout/sidenav.html.twig' %}
+        <main class="layout-content overflow-y-scroll overflow-x-scroll">
+            {% include 'partials/example.html.twig' %}
+        </main>
     </div>
 {% endblock %}
