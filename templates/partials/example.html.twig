@@ -1,0 +1,28 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Textspalte mit Link</th>
+        <th>Textspalte</th>
+        <th>Zahlen</th>
+        <th>Spalte mit Status</th>
+        <th>Spalte mit Bild</th>
+        <th>Spalte mit Button</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for i in range(1, 5) %}
+        <tr>
+            <td>
+                <a href="#" class="link">Link</a>
+            </td>
+            <td>Label</td>
+            <td class="text-right">1.234,56</td>
+            <td>Status</td>
+            <td class="flex justify-center items-center"><img class="h-32" src="https://picsum.photos/200"></td>
+            <td>
+                <button class="btn">Button</button>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

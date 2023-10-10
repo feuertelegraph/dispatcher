@@ -9,14 +9,14 @@
         </aside>
 
         <div class="flex-1 min-h-screen flex flex-col min-w-0 overflow-auto ...">
-            <div class="min-h-screen flex flex-col">
+            <div class="min-h-screen max-h-screen flex flex-col">
                 <header class="bg-gray-200 flex justify-between">
                     {% include 'partials/layout/navbar/nav.html.twig' %}
-                    <div class="p-4">
-                        User
-                    </div>
+                    {% include 'partials/layout/navbar/profile.html.twig' %}
                 </header>
-                <main class="flex-1"></main>
+                <main class="flex-1 overflow-y-scroll p-2">
+                    {% include 'partials/example.html.twig' %}
+                </main>
             </div>
         </div>
     </div>

@@ -1,3 +1,36 @@
 @tailwind base
 @tailwind components
 @tailwind utilities
+
+@layer components
+  .heading
+    @apply font-heading
+  .h1
+    @apply text-5xl font-bold
+  .h2
+    @apply text-4xl
+  .h3
+    @apply text-3xl
+  .h4
+    @apply text-2xl
+  .h5
+    @apply text-xl
+  .h6
+    @apply text-lg
+  .link
+    @apply text-dp-orange underline
+  .input
+    @apply bg-gray-100 border-b-2 border-b-2 border-b-dp-orange-300 rounded px-2 py-1 hover:bg-gray-200 focus:border-b-dp-orange outline-0
+  .table
+    @apply w-full
+    thead
+      @apply border-b-2 border-b-dp-orange-300
+      th
+        @apply p-2
+    tbody
+      tr
+        @apply even:bg-gray-100 border-b-2 border-b-gray-200 hover:bg-gray-200 transition
+        td
+          @apply p-2
+  .btn
+    @apply bg-dp-orange-600 text-white px-4 py-2 rounded font-bold hover:bg-dp-orange transition
