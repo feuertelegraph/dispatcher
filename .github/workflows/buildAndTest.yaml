@@ -26,7 +26,11 @@ jobs:
         run: "php vendor/bin/parallel-lint --no-progress src"
 
       - name: Run CodeSniffer with PSR12
-        run: "php vendor/bin/phpcs --standard=phpcs.xml"
+        run: |
+          mv phpcs.xml.dist phpcs.xml
+          php vendor/bin/phpcs --standard=phpcs.xml
 
       - name: Run PHPStan
-        run: "php vendor/bin/phpstan --no-progress"
+        run: |
+          mv phpstan.dist.neon phpstan.neon
+          php vendor/bin/phpstan --no-progress
