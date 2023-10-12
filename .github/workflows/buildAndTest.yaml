@@ -1,0 +1,32 @@
+name: Build and Test
+
+on:
+  workflow_call:
+
+jobs:
+  buildAndTest:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('composer.lock') }}
+        
+      - uses: php-actions/composer@v6
+        with:
+          php_version: "8.1"
+          dev: yes
+          args: --ignore-platform-reqs
+
+      - name: Run PHP linter
+        run: "php vendor/bin/parallel-lint --no-progress src"
+
+      - name: Run CodeSniffer with PSR12
+        run: "php vendor/bin/phpcs --standard=phpcs.xml"
+
+      - name: Run PHPStan
+        run: "php vendor/bin/phpstan --no-progress"

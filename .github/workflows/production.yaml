@@ -1,0 +1,21 @@
+name: Deploy to production
+
+on:
+  push:
+    branches:
+      - 'main'
+
+permissions:
+  id-token: write
+  contents: read 
+
+jobs:
+  buildAndTest:
+    uses: ./.github/workflows/buildAndTest.yaml
+
+  deploy:
+    needs: buildAndTest
+    name: Deploy to production
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "There is no production at the moment."
