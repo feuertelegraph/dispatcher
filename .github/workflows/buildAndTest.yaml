@@ -32,5 +32,7 @@ jobs:
 
       - name: Run PHPStan
         run: |
+          php bin/console cache:warmup --env=dev
+          php bin/console cache:warmup --env=test
           mv phpstan.dist.neon phpstan.neon
           php vendor/bin/phpstan --no-progress
