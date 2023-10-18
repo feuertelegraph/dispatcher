@@ -1,0 +1,12 @@
+parameters:
+    level: 7
+    paths:
+        - bin
+        - config
+        - public
+        - src
+        - tests
+    tipsOfTheDay: false
+    symfony:
+        container_xml_path: var/cache/dev/Feuertelegraph_KernelDevDebugContainer.xml
+        console_application_loader: tests/console-application.php

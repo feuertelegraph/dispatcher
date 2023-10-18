@@ -1,0 +1,11 @@
+name: Run build and test steps
+
+on:
+  push:
+    branches-ignore:
+      - "main"
+      - "development"
+
+jobs:
+  default: 
+    uses: ./.github/workflows/buildAndTest.yaml

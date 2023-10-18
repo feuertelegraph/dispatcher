@@ -1,0 +1,36 @@
+name: Auto-PR for new hotfix branches
+
+on:
+  push:
+    branches:
+      - 'hotfix/**'
+
+jobs:
+  auto-pull-request:
+    name: Create pull requests
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Build custom title for PR into main
+        run: |
+            NAME="Merge ${GITHUB_REF#refs/heads/} into main"
+            echo "PULL_REQUEST_TITLE=${NAME}" >> $GITHUB_ENV
+
+      - name: hotfix into main
+        uses: vsoch/pull-request-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_PREFIX: "hotfix/"
+          PULL_REQUEST_BRANCH: "main"
+
+      - name: Build custom title for PR into development
+        run: |
+            NAME="Merge ${GITHUB_REF#refs/heads/} into development"
+            echo "PULL_REQUEST_TITLE=${NAME}" >> $GITHUB_ENV
+
+      - name: hotfix into development
+        uses: vsoch/pull-request-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_PREFIX: "hotfix/"
+          PULL_REQUEST_BRANCH: "development"

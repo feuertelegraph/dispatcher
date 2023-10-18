@@ -1,0 +1,21 @@
+name: Deploy to staging
+
+on:
+  push:
+    branches:
+      - 'development'
+
+permissions:
+  id-token: write
+  contents: read 
+
+jobs:
+  buildAndTest:
+    uses: ./.github/workflows/buildAndTest.yaml
+
+  deploy:
+    needs: buildAndTest
+    name: Deploy to staging
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "There is no staging at the moment."
