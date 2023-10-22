@@ -16,5 +16,5 @@ nodejs_version: "18"
 hooks:
     post-start:
         - composer: install
-        - exec: cd /var/www/html/src; npm ci
-        - exec: cd /var/www/html/src; npm run build
+        - exec: cd /var/www/html; npm ci
+        - exec: cd /var/www/html; npm run dev

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+## Description: Symfony console
+## Usage: console
+
+bin/console $@
