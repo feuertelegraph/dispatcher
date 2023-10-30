@@ -1,0 +1,31 @@
+{% macro textinput(name, value, type = "text", size = 20, id, required = false) %}
+    <div class="flex flex-col gap-0.5">
+        <input
+                class="bg-gray-100 border-b-2 border-b-dp-orange-300 rounded px-2 py-1 hover:bg-gray-200 focus:border-b-dp-orange outline-0"
+                type="{{ type }}"
+                name="{{ name }}"
+                value="{{ value|e }}"
+                size="{{ size }}"
+                id={{ id }}
+                {{ required ? "required" : "" }}/>
+        {{ _self.helptext("This is some text that might help") }}
+    </div>
+{% endmacro %}
+
+{% macro helptext(content) %}
+    <small class="text-sm text-gray-500">
+        {{ content }}
+    </small>
+{% endmacro %}
+
+{% macro label(for, content, required = false) %}
+    <label class="font-bold" for="{{ for }}">
+        <span>{{ content }}: </span>
+        {{ required ? '<strong><span aria-label="required">*</span></strong>' : '' }}
+    </label>
+{% endmacro %}
+
+{% macro textinput_label(name, label, value, type = "text", size = 20, id, required = false) %}
+    {{ _self.label(id, label, required) }}
+    {{ _self.textinput(name, value, type, size, id, required) }}
+{% endmacro %}
