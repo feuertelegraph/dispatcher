@@ -1,4 +1,5 @@
 {% import "partials/macros/form.html.twig" as forms %}
+{% import "macros/button.html.twig" as button  %}
 
 <section class="min-h-screen">
     <form class="form">
@@ -35,18 +36,29 @@
         </fieldset>
     </form>
 </section>
-<section class="min-h-screen">
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Textspalte mit Link</th>
-            <th>Textspalte</th>
-            <th>Zahlen</th>
-            <th>Spalte mit Status</th>
-            <th>Spalte mit Bild</th>
-            <th>Spalte mit Button</th>
-        </tr>
-        </thead>
+<div class="min-h-screen">
+    {{ button.button("Submit", "primary", "button") }}
+    {{ button.button("Submit", "primary-outline", "button") }}
+    {{ button.button("Submit", "success", "button") }}
+    {{ button.button("Submit", "info", "button") }}
+    {{ button.button("Submit", "warning", "button") }}
+    {{ button.button("Submit", "danger", "button") }}
+
+    {{ button.infobox("This is success", "succsess") }}
+
+    {% include 'macros/modal.html.twig' %}
+</div>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Textspalte mit Link</th>
+        <th>Textspalte</th>
+        <th>Zahlen</th>
+        <th>Spalte mit Status</th>
+        <th>Spalte mit Bild</th>
+        <th>Spalte mit Button</th>
+    </tr>
+    </thead>
         <tbody>
         {% for i in range(1, 5) %}
             <tr>

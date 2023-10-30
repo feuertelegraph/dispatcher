@@ -1,0 +1,43 @@
+{% macro button(content, color, type = "submit") %}
+    {% if color == "primary"%}
+        {% set color = "border-dp-orange-600 bg-dp-orange text-white hover:bg-dp-orange hover:text-white" %}
+    {% endif %}
+    {% if color == "primary-outline" %}
+        {% set color = "border-dp-orange bg-none hover:bg-dp-orange-200" %}
+    {% endif %}
+    {% if color == "success"%}
+        {% set color = "border-green-700 bg-green-600 text-white hover:bg-green-700 hover:text-white" %}
+    {% endif %}
+    {% if color == "info"%}
+        {% set color = "border-blue-700 bg-blue-600 text-white hover:bg-blue-700 hover:text-white" %}
+    {% endif %}
+    {% if color == "warning"%}
+        {% set color = "border-amber-700 bg-amber-600 text-white hover:bg-amber-700 hover:text-white" %}
+    {% endif %}
+    {% if color == "danger"%}
+        {% set color = "border-red-700 bg-red-600 text-white hover:bg-red-700 hover:text-white" %}
+    {% endif %}
+    <button type="{{ type }}" class="border-2 px-4 py-2 font-bold transition {{ color }}">
+        {{ content }}
+    </button>
+{% endmacro %}
+
+{% macro infobox(content, color) %}
+    {% if color == "succsess"%}
+        {% set color = "border-l-green-600 bg-green-200" %}
+    {% endif %}
+    {% if color == "info"%}
+        {% set color = "border-l-blue-600 bg-blue-200" %}
+    {% endif %}
+    {% if color == "warning"%}
+        {% set color = "border-l-amber-600 bg-amber-200" %}
+    {% endif %}
+    {% if color == "danger"%}
+        {% set color = "border-l-red-600 bg-red-200" %}
+    {% endif %}
+
+    <div class="px-4 py-2 border-l-2 text-black {{ color }}">
+        {{ content }}
+    </div>
+{% endmacro %}
+
