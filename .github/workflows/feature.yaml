@@ -1,0 +1,24 @@
+name: Auto-PR for new feature branches
+
+on:
+  push:
+    branches:
+      - 'feature/**'
+
+jobs:
+  auto-pull-request:
+    name: Create pull requests
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Build custom PR title
+        run: |
+            NAME="Merge ${GITHUB_REF#refs/heads/} into development"
+            echo "PULL_REQUEST_TITLE=${NAME}" >> $GITHUB_ENV
+
+      - name: feature into development
+        uses: vsoch/pull-request-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH_PREFIX: "feature/"
+          PULL_REQUEST_BRANCH: "development"
