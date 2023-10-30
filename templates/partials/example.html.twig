@@ -1,6 +1,12 @@
 {% import "partials/macros/form.html.twig" as forms %}
 {% import "macros/button.html.twig" as button  %}
 
+{% set optionsExample = {
+    'key1': 'value1',
+    'key2': 'value2',
+    'key3': 'value3'
+} %}
+
 <section class="min-h-screen">
     <form class="form">
         <div class="form-group">
@@ -10,31 +16,10 @@
             {{ forms.textinput_label(
                 "textinput", "Text Input", "", "text", 20, "textinput", false
             ) }}
-            {{ forms.select_label("selectinput", "Select", [], "selectinput", true, "https://google.com") }}
+            {{ forms.select_label("selectinput", "Select", optionsExample, "selectinput", true, "https://google.com") }}
+            {{ forms.check_label("selectinput", "Radio", optionsExample, "selectinput", true, "https://google.com") }}
+            {{ forms.check_label("selectinput", "Checkbox   ", optionsExample, "selectinput", true, "https://google.com", "", "checkbox") }}
         </div>
-        <fieldset>
-            <legend>Title</legend>
-            <ul>
-                <li>
-                    <label for="title_1">
-                        <input type="radio" id="title_1" name="title" value="K" />
-                        King
-                    </label>
-                </li>
-                <li>
-                    <label for="title_2">
-                        <input type="radio" id="title_2" name="title" value="Q" />
-                        Queen
-                    </label>
-                </li>
-                <li>
-                    <label for="title_3">
-                        <input type="radio" id="title_3" name="title" value="J" />
-                        Joker
-                    </label>
-                </li>
-            </ul>
-        </fieldset>
     </form>
 </section>
 <div class="min-h-screen">

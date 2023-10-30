@@ -19,10 +19,25 @@
                 name="{{ name }}"
                 id="{{ id }}"
                 {{ required ? "required" : "" }}>
-            {% for value, text in values %}
+            {% for key, text in values %}
                 <option value="{{ key }}">{{ text }}</option>
             {% endfor %}
         </select>
+        {{ _self.helptext(helptext, helplink) }}
+    </div>
+{% endmacro %}
+
+{% macro check(name, values, id, required = false, helplink, helptext, type) %}
+    <div class="flex flex-col gap-0.5">
+        <div class="flex gap-4">
+            {% for key, text in values %}
+                <div class="flex items-center gap-2">
+                    <input
+                            type="{{ type }}" id="{{ id }}_{{ loop.index }}" name="{{ name }}" value="{{ key }}" {{ required ? "required" : "" }} />
+                    <label for="{{ id }}_{{ loop.index }}">{{ text }}</label>
+                </div>
+            {% endfor %}
+        </div>
         {{ _self.helptext(helptext, helplink) }}
     </div>
 {% endmacro %}
@@ -55,4 +70,9 @@
 {% macro select_label(name, label, values, id, required = false, helplink, helptext) %}
     {{ _self.label(id, label, required) }}
     {{ _self.select(name, values, id, required, helplink, helptext) }}
+{% endmacro %}
+
+{% macro check_label(name, label, values, id, required = false, helplink, helptext, type = "radio") %}
+    {{ _self.label(id, label, required) }}
+    {{ _self.check(name, values, id, required, helplink, helptext, type) }}
 {% endmacro %}
