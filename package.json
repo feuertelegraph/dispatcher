@@ -27,6 +27,7 @@
     },
     "dependencies": {
         "@fontsource-variable/open-sans": "^5.0.16",
-        "@fontsource-variable/work-sans": "^5.0.14"
+        "@fontsource-variable/work-sans": "^5.0.14",
+        "leaflet": "^1.9.4"
     }
 }

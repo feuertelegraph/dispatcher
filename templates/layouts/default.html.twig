@@ -1,0 +1,13 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% block body %}
+    <div class="layout-grid">
+        {% include 'partials/layout/logo.html.twig' %}
+        {% include 'partials/layout/topnav.html.twig' %}
+        {% include 'partials/layout/profile.html.twig' %}
+        {% include 'partials/layout/sidenav.html.twig' %}
+        <main class="layout-content overflow-y-scroll overflow-x-scroll">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+{% endblock %}
