@@ -70,6 +70,12 @@ Encore
     //.autoProvidejQuery()
 
     .enablePostCssLoader()
+
+    // Add loaders for fontsource
+    .addLoader({
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        loader: "file-loader",
+    })
 ;
 
 module.exports = Encore.getWebpackConfig();

@@ -1,0 +1,41 @@
+{% set id = random() %}
+{% import "macros/button.html.twig" as button  %}
+
+<button data-action="modal#open" class="btn-outline" id="{{ id }}-open">Open modal</button>
+
+<dialog data-modal-target="modal" id="{{ id }}">
+    <div class="p-4 flex justify-between gap-8 border-b-2 border-b-gray-400">
+        <h1 class="text-lg">Choose from box</h1>
+        <button type="button" data-action="modal#close" id="{{ id }}-close">X</button>
+    </div>
+
+    <input class="p-4 w-96 border-b-2 border-b-dp-orange" type="text" placeholder="Search...">
+
+    <div class="bg-gray-200 flex flex-col gap-4 px-2 py-4">
+        <div class="bg-gray-50 p-2 rounded cursor-pointer hover:bg-dp-orange-100">
+            Option
+        </div>
+    </div>
+
+    <div class="flex justify-between p-2 border-t-2 bg-gray-100">
+        {{ button.button("Close", "success", "button") }}
+        {{ button.button("Abort", "danger", "button") }}
+    </div>
+</dialog>
+
+<script>
+    const dialog = document.getElementById("{{ id }}");
+    const showButton = document.getElementById("{{ id }}-open");
+    const closeButton = document.getElementById("{{ id }}-close");
+
+    // "Show the dialog" button opens the dialog modally
+    showButton.addEventListener("click", () => {
+        console.log("open")
+        dialog.showModal();
+    });
+
+    // "Close" button closes the dialog
+    closeButton.addEventListener("click", () => {
+        dialog.close();
+    });
+</script>
