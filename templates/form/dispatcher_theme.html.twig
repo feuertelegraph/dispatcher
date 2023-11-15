@@ -16,14 +16,56 @@
     <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
         {{- form_errors(form) -}}
         {{- form_widget(form, widget_attr) -}}
-        {{- form_help(form) -}}
+        <div class="flex justify-between items-center">
+            {{- form_help(form) -}}
+            {% if false %}
+                <a href="#" target="_blank" rel="noopener noreferrer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-dp-orange" viewBox="0 0 24 24"><path d="m15.07 11.25l-.9.92C13.45 12.89 13 13.5 13 15h-2v-.5c0-1.11.45-2.11 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41a2 2 0 0 0-2-2a2 2 0 0 0-2 2H8a4 4 0 0 1 4-4a4 4 0 0 1 4 4a3.2 3.2 0 0 1-.93 2.25M13 19h-2v-2h2M12 2A10 10 0 0 0 2 12a10 10 0 0 0 10 10a10 10 0 0 0 10-10c0-5.53-4.5-10-10-10Z"/></svg>
+                </a>
+            {% endif %}
+        </div>
     </div>
 {%- endblock form_row -%}
 
-{%- block widget_attributes -%}
-    {%- set attr = attr|merge({ class: attr.class|default(widget_class|default('bg-gray-100 border-b-2 border-b-dp-orange-300 rounded px-2 py-1 hover:bg-gray-200 focus:border-b-dp-orange outline-0 w-full')) ~ (disabled ? ' ' ~ widget_disabled_class|default('')) ~ (errors|length ? ' ' ~ widget_errors_class|default('')) }) -%}
+{%- block checkbox_widget -%}
     {{- parent() -}}
-{%- endblock widget_attributes -%}
+{%- endblock checkbox_widget -%}
+
+{%- block radio_widget -%}
+    {{- parent() -}}
+{%- endblock radio_widget -%}
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    {% if type == 'text' %}
+        {%- set attr = attr|merge({ class: attr.class|default(widget_class|default('bg-gray-100 border-b-2 border-b-dp-orange-300 rounded px-2 py-1 hover:bg-gray-200 focus:border-b-dp-orange outline-0 w-full')) }) -%}
+    {% endif %}
+    {% if type == 'range' %}
+        {%- set attr = attr|merge({ class: attr.class|default(widget_class|default('w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer')) }) -%}
+    {% endif %}
+    {{- parent() -}}
+{%- endblock form_widget_simple -%}
+
+{%- block textarea_widget -%}
+    {%- set attr = attr|merge({ class: attr.class|default(widget_class|default('bg-gray-100 border-b-2 border-b-dp-orange-300 rounded px-2 py-1 hover:bg-gray-200 focus:border-b-dp-orange outline-0 w-full')) }) -%}
+    {{- parent() -}}
+{%- endblock textarea_widget -%}
+
+{%- block choice_widget_collapsed -%}
+    {%- set attr = attr|merge({ class: attr.class|default(widget_class|default('bg-gray-100 border-b-2 border-b-dp-orange-300 rounded px-2 py-2 hover:bg-gray-200 focus:border-b-dp-orange outline-0')) }) -%}
+    {{- parent() -}}
+{%- endblock choice_widget_collapsed -%}
+
+{%- block choice_widget_expanded -%}
+    <div {{ block('widget_container_attributes') }} class="flex gap-4">
+        {%- for child in form %}
+            <div class="bg-gray-200 p-2 gap-2 flex">
+                {{- form_widget(child) -}}
+                {{- form_label(child, null, {translation_domain: choice_translation_domain}) -}}
+            </div>
+        {% endfor -%}
+    </div>
+{%- endblock choice_widget_expanded -%}
 
 {%- block form_label -%}
     {%- set label_attr = label_attr|merge({ class: label_attr.class|default(label_class|default('text-right font-bold pt-1')) }) -%}

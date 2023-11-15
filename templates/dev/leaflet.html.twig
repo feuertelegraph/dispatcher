@@ -1,5 +1,4 @@
 {% extends '../layouts/default.html.twig' %}
-{% import "partials/macros/form.html.twig" as forms %}
 
 {% set optionsExample = {
     'key1': 'value1',
@@ -10,12 +9,6 @@
 {% block content %}
     <div class="flex flex-col h-full">
         <div id="dispatcher-map-toolbar" class="bg-gray-300 block p-1 flex justify-start gap-4">
-            <div class="flex items-center gap-2 w-auto">
-                {{ forms.select_label("mapfilter", "Filter", optionsExample, "mapfilter", false) }}
-            </div>
-            <div class="flex items-center gap-2 w-auto">
-                {{ forms.check_label("maptoggles", "Ein/Ausblenden", optionsExample, "maptoggles", false) }}
-            </div>
         </div>
         <div id="dispatcher-map" class="block h-full"></div>
     </div>
