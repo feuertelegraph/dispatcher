@@ -1,17 +1,3 @@
-{% macro textinput(name, value, type = "text", size = 20, id, required = false, helplink, helptext) %}
-    <div class="flex flex-col gap-0.5">
-        <input
-                class="bg-gray-100 border-b-2 border-b-dp-orange-300 rounded px-2 py-1 hover:bg-gray-200 focus:border-b-dp-orange outline-0"
-                type="{{ type }}"
-                name="{{ name }}"
-                value="{{ value|e }}"
-                size="{{ size }}"
-                id={{ id }}
-                {{ required ? "required" : "" }}/>
-        {{ _self.helptext(helptext, helplink) }}
-    </div>
-{% endmacro %}
-
 {% macro select(name, values, id, required = false, helplink, helptext) %}
     <div class="flex flex-col gap-0.5">
         <select

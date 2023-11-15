@@ -1,0 +1,47 @@
+{% use 'form_div_layout.html.twig' %}
+
+{%- block form_widget_compound -%}
+    {%- if form is rootform -%}
+        {%- set attr = attr|merge({ class: help_attr.class|default(help_class|default('grid grid-cols-[auto_1fr] gap-2 pb-2')) }) -%}
+    {%- endif -%}
+    {{- parent() -}}
+{%- endblock form_widget_compound -%}
+
+{%- block form_row -%}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+    {{- form_label(form) -}}
+    <div{% with {attr: row_attr} %}{{ block('attributes') }}{% endwith %}>
+        {{- form_errors(form) -}}
+        {{- form_widget(form, widget_attr) -}}
+        {{- form_help(form) -}}
+    </div>
+{%- endblock form_row -%}
+
+{%- block widget_attributes -%}
+    {%- set attr = attr|merge({ class: attr.class|default(widget_class|default('bg-gray-100 border-b-2 border-b-dp-orange-300 rounded px-2 py-1 hover:bg-gray-200 focus:border-b-dp-orange outline-0 w-full')) ~ (disabled ? ' ' ~ widget_disabled_class|default('')) ~ (errors|length ? ' ' ~ widget_errors_class|default('')) }) -%}
+    {{- parent() -}}
+{%- endblock widget_attributes -%}
+
+{%- block form_label -%}
+    {%- set label_attr = label_attr|merge({ class: label_attr.class|default(label_class|default('text-right font-bold pt-1')) }) -%}
+    {{- parent() -}}
+{%- endblock form_label -%}
+
+{%- block form_help -%}
+    {%- set help_attr = help_attr|merge({ class: help_attr.class|default(help_class|default('text-sm text-gray-500')) }) -%}
+    {{- parent() -}}
+{%- endblock form_help -%}
+
+{%- block button_row -%}
+    <div></div>
+    {{- parent() -}}
+{%- endblock button_row -%}
+
+{%- block button_attributes -%}
+    {% import "macros/button.html.twig" as button %}
+    class="{{ button.buttonClass("success") }}"
+    {{- parent() -}}
+{%- endblock button_attributes -%}

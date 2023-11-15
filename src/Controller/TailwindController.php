@@ -15,12 +15,4 @@ class TailwindController extends AbstractController
             'controller_name' => 'TailwindController',
         ]);
     }
-
-    #[Route('/leaflet', name: 'leaflet')]
-    public function leaflet(): Response
-    {
-        return $this->render('leaflet.html.twig', [
-            'controller_name' => 'TailwindController',
-        ]);
-    }
 }
