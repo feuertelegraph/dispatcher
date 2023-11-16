@@ -1,4 +1,4 @@
-{% extends '../layouts/default.html.twig' %}
+{% extends 'layouts/default.html.twig' %}
 
 {% set optionsExample = {
     'key1': 'value1',
@@ -9,7 +9,237 @@
 {% block content %}
     <div class="flex flex-col h-full">
         <div id="dispatcher-map-toolbar" class="bg-gray-300 block p-1 flex justify-start gap-4">
+
         </div>
         <div id="dispatcher-map" class="block h-full"></div>
     </div>
+    <script>
+
+        const demoData = {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "type": "firestation",
+                        "marker-color": "#00eeff",
+                        "marker-size": "medium",
+                        "marker-symbol": "circle"
+                    },
+                    "geometry": {
+                        "coordinates": [
+                            8.78495659758525,
+                            50.01063510316243
+                        ],
+                        "type": "Point"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "type": "coverageArea"
+                    },
+                    "geometry": {
+                        "coordinates": [
+                            [
+                                [
+                                    8.771855211957131,
+                                    50.019083398125304
+                                ],
+                                [
+                                    8.76513861722924,
+                                    50.01638060437347
+                                ],
+                                [
+                                    8.765884905531834,
+                                    50.00059674077667
+                                ],
+                                [
+                                    8.796821947918119,
+                                    49.99937567347348
+                                ],
+                                [
+                                    8.807337828553244,
+                                    50.01080016210784
+                                ],
+                                [
+                                    8.793701105922452,
+                                    50.0209142365419
+                                ],
+                                [
+                                    8.771855211957131,
+                                    50.019083398125304
+                                ]
+                            ]
+                        ],
+                        "type": "Polygon"
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "type": "firestation",
+                        "marker-color": "#00eeff",
+                        "marker-size": "medium",
+                        "marker-symbol": "circle"
+                    },
+                    "geometry": {
+                        "coordinates": [
+                            8.799522154490603,
+                            50.05496742656692
+                        ],
+                        "type": "Point"
+                    },
+                    "id": 2
+                },
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "type": "coverageArea"
+                    },
+                    "geometry": {
+                        "coordinates": [
+                            [
+                                [
+                                    8.795309977729033,
+                                    50.0628225325612
+                                ],
+                                [
+                                    8.777759241223038,
+                                    50.062693770700434
+                                ],
+                                [
+                                    8.773647354384309,
+                                    50.053872760524655
+                                ],
+                                [
+                                    8.782472867598727,
+                                    50.04073482009244
+                                ],
+                                [
+                                    8.829308261588977,
+                                    50.04769064829344
+                                ],
+                                [
+                                    8.822689126678682,
+                                    50.0628225325612
+                                ],
+                                [
+                                    8.795309977729033,
+                                    50.0628225325612
+                                ]
+                            ]
+                        ],
+                        "type": "Polygon"
+                    },
+                    "id": 3
+                },
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "type": "member",
+                        "name": "Florian Nord",
+                        "unit": "Angriffstrupp",
+                        "timeToStation": 100,
+                        "marker-color": "#00ff2a",
+                        "marker-size": "medium",
+                        "marker-symbol": "circle"
+                    },
+                    "geometry": {
+                        "coordinates": [
+                            8.809062046708362,
+                            50.05954009961221
+                        ],
+                        "type": "Point"
+                    },
+                    "id": 4
+                },
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "type": "occasion",
+                        "occasionType": "fire",
+                        "marker-color": "#ff8800",
+                        "marker-size": "medium",
+                        "marker-symbol": "circle",
+                        "deadlineFulfilled": "true"
+                    },
+                    "geometry": {
+                        "coordinates": [
+                            8.787689614661474,
+                            50.05808341117563
+                        ],
+                        "type": "Point"
+                    },
+                    "id": 5
+                },
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "type": "occasion",
+                        "occasionType": "help",
+                        "deadlineFulfilled": "false",
+                        "marker-color": "#9900ff",
+                        "marker-size": "medium",
+                        "marker-symbol": "circle"
+                    },
+                    "geometry": {
+                        "coordinates": [
+                            8.805229618286546,
+                            50.05152901797268
+                        ],
+                        "type": "Point"
+                    },
+                    "id": 6
+                }
+            ]
+        };
+    </script>
+    <script>
+        var map = L.map('dispatcher-map');
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        var jsonData = demoData;
+
+        function dataToLayer(data, type, popupTextFunction, icon) {
+            return L.geoJSON(data, {
+                filter: function(feature, layer) {
+                    return feature.properties.type === type
+                },
+                pointToLayer: function(feature, latlong) {
+                    return L.marker(latlong).on('mouseover', function() {
+                        this.bindPopup(popupTextFunction(feature)).openPopup();
+                    });
+                }
+            })
+        }
+
+        var occasions = dataToLayer(jsonData, 'occasion', (feature) => {
+            return `<b>Einsatz</b><br>
+                    <b>Art des Einsatzes: </b>${feature.properties.occasionType}<br>
+                    <b>Hilfsfrist eing.: </b>${JSON.parse(feature.properties.deadlineFulfilled) ? "Ja" : "Nein"}`
+        })
+        var firestations = dataToLayer(jsonData, 'firestation',  (feature) => {
+            return `<b>Feuerwehrhaus</b>`
+        })
+        var members = dataToLayer(jsonData, 'member', (feature) => {
+            return `<b>akt. Mitglied</b><br>
+                    <b>Name: </b>${feature.properties.name}<br>
+                    <b>Einheit: </b>${feature.properties.unit}<br>`
+        })
+        var coverageAreas = dataToLayer(jsonData, 'coverageArea')
+
+        occasions.addTo(map)
+        firestations.addTo(map)
+        members.addTo(map)
+        coverageAreas.addTo(map)
+
+        map.fitBounds(L.geoJSON(jsonData).getBounds(), {
+            padding: [50, 50]
+        })
+    </script>
 {% endblock %}

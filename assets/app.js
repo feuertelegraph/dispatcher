@@ -13,8 +13,8 @@ import '@fontsource-variable/work-sans';
 import '@fontsource-variable/open-sans';
 
 // leaflet
-import "leaflet/dist/leaflet.js";
 import "leaflet/dist/leaflet.css";
-
 import "./scripts/leaflet";
+global.L = require('leaflet')
+window.L = require('leaflet')
 
