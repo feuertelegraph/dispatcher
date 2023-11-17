@@ -1,0 +1,36 @@
+{% extends 'layouts/base.html.twig' %}
+{% import "macros/button.html.twig" as button %}
+{% set error = null %}
+
+{% block body %}
+    {% if error %}
+        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <div
+            style="background-image:url('{{ asset('images/bg_login.png') }}')"
+            class="grid md:grid-cols-2 h-screen items-center bg-center bg-cover p-4">
+        <div class="bg-gray-200 rounded-xl p-6 py-8 border-b-8 border-dp-orange shadow-lg shadow-gray-500 justify-self-center max-w-lg">
+            <div class="flex justify-center items-center gap-4 pb-4">
+                <div class="bg-black h-28 w-28 block"></div>
+                <h1 class="font-black font-heading text-2xl md:text-3xl">
+                    Freiwillige Feuerwehr Musterhausen
+                </h1>
+            </div>
+            <form action="/replaceme" method="post" class="flex flex-col gap-4">
+                <div class="flex flex-col justify-start items-start gap-2">
+                    <label for="username" class="text-right font-bold">E-Mail:</label>
+                    <input type="text" id="username" name="_username" class="bg-gray-100 border-b-2 border-b-dp-orange-300 rounded px-2 py-2 hover:bg-gray-200 focus:border-b-dp-orange outline-0 w-full">
+                </div>
+
+                <div class="flex flex-col justify-start items-start gap-2">
+                    <label for="password" class="text-right font-bold">Passwort:</label>
+                    <input type="password" id="password" name="_password" class="bg-gray-100 border-b-2 border-b-dp-orange-300 rounded px-2 py-2 hover:bg-gray-200 focus:border-b-dp-orange outline-0 w-full">
+                </div>
+
+                <button type="submit" class="{{ button.buttonClass("primary") }} mt-2">Anmelden</button>
+            </form>
+        </div>
+        <img src="{{ asset('images/logo.svg') }}" class="justify-self-center hidden md:block">
+    </div>
+{% endblock %}
