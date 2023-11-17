@@ -1,15 +1,33 @@
 {% extends 'layouts/default.html.twig' %}
 
-{% set optionsExample = {
-    'key1': 'value1',
-    'key2': 'value2',
-    'key3': 'value3'
-} %}
-
 {% block content %}
     <div class="flex flex-col h-full">
         <div id="dispatcher-map-toolbar" class="bg-gray-300 block p-1 flex justify-start gap-4">
-
+            <fieldset>
+                <legend>angezeigte Elemente:</legend>
+                {% for label, group in toggleableElements %}
+                    <div>
+                        <input type="checkbox" id="checkbox_{{ group }}" name="{{ group }}" checked />
+                        <label for="{{ group }}">{{ label }}</label>
+                    </div>
+                {% endfor %}
+            </fieldset>
+            <fieldset>
+                <legend>Funktionen:</legend>
+                {% for label, group in toggleableUnits %}
+                    <div>
+                        <input type="checkbox" id="checkbox_{{ group }}" name="{{ group }}" checked />
+                        <label for="{{ group }}">{{ label }}</label>
+                    </div>
+                {% endfor %}
+            </fieldset>
+            <fieldset>
+                <legend>Abteilungen:</legend>
+            </fieldset>
+            <fieldset>
+                <legend>Ankunftszeit Mitglieder:</legend>
+                <legend>Hilfsfrist eingehalten:</legend>
+            </fieldset>
         </div>
         <div id="dispatcher-map" class="block h-full"></div>
     </div>
@@ -205,16 +223,22 @@
 
         var jsonData = demoData;
 
-        function dataToLayer(data, type, popupTextFunction, icon) {
+        function dataToLayer(data, type, popupTextFunction, customFilter = (f, l) => true) {
             return L.geoJSON(data, {
                 filter: function(feature, layer) {
-                    return feature.properties.type === type
+                    return feature.properties.type === type && customFilter(feature, layer)
                 },
                 pointToLayer: function(feature, latlong) {
                     return L.marker(latlong).on('mouseover', function() {
                         this.bindPopup(popupTextFunction(feature)).openPopup();
                     });
                 }
+            })
+        }
+
+        function mapToggleCheckbox(checkboxId, layer) {
+            document.getElementById(checkboxId).addEventListener("click", (e) => {
+                e.target.checked ? layer.addTo(map) : layer.removeFrom(map);
             })
         }
 
@@ -237,6 +261,10 @@
         firestations.addTo(map)
         members.addTo(map)
         coverageAreas.addTo(map)
+
+        {% for label, group in toggleableElements %}
+        mapToggleCheckbox("checkbox_{{ group }}", {{ group }});
+        {% endfor %}
 
         map.fitBounds(L.geoJSON(jsonData).getBounds(), {
             padding: [50, 50]

@@ -21,8 +21,26 @@ class TestController extends AbstractController
     #[Route('/dev/leaflet', name: 'dev_leaflet', condition: '%kernel.debug% === 1')]
     public function leaflet(): Response
     {
+        $toggleableElements = [
+            'Einsätze' => 'occasions',
+            'Feuerwehrhäuser' => 'firestations',
+            'Mitglieder' => 'members',
+            'Einsatzgebiete' => 'coverageAreas'
+        ];
+
+        $toggleableUnits = [
+            'Gruppenführer' => 'leader',
+            'Maschinist' => 'maschinist',
+            'Melder' => 'melder',
+            'Angriffstrupp' => 'angriffstrupp',
+            'Wassertrupp' => 'wassertrupp',
+            'Schlauchtrupp' => 'schlauchtrupp',
+        ];
+
         return $this->render('dev/leaflet.html.twig', [
             'controller_name' => 'TailwindController',
+            'toggleableElements' => $toggleableElements,
+            'toggleableUnits' => $toggleableUnits
         ]);
     }
     #[Route('/dev/ui', name: 'dev_ui', condition: '%kernel.debug% === 1')]
