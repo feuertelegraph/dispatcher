@@ -223,13 +223,23 @@
 
         var jsonData = demoData;
 
-        function dataToLayer(data, type, popupTextFunction, customFilter = (f, l) => true) {
+        function genIcon(path) {
+            return L.icon({
+                iconUrl: path,
+                iconSize: [32, 32],
+                iconAnchor: [16, 16],
+            })
+        }
+
+        function dataToLayer(data, type, popupTextFunction, fIcon, customFilter = (f, l) => true) {
             return L.geoJSON(data, {
                 filter: function(feature, layer) {
                     return feature.properties.type === type && customFilter(feature, layer)
                 },
                 pointToLayer: function(feature, latlong) {
-                    return L.marker(latlong).on('mouseover', function() {
+                    return L.marker(latlong, {
+                        icon: fIcon(feature)
+                    }).on('mouseover', function() {
                         this.bindPopup(popupTextFunction(feature)).openPopup();
                     });
                 }
@@ -246,16 +256,25 @@
             return `<b>Einsatz</b><br>
                     <b>Art des Einsatzes: </b>${feature.properties.occasionType}<br>
                     <b>Hilfsfrist eing.: </b>${JSON.parse(feature.properties.deadlineFulfilled) ? "Ja" : "Nein"}`
+        }, (feature) => {
+            if (feature.properties.occasionType == 'fire') {
+                return genIcon('{{ asset('images/markers/occasion_fire.png') }}')
+            } else {
+                return genIcon('{{ asset('images/markers/occasion_help.png') }}')
+            }
         })
+
         var firestations = dataToLayer(jsonData, 'firestation',  (feature) => {
             return `<b>Feuerwehrhaus</b>`
-        })
+        }, (feature) => genIcon('{{ asset('images/markers/firestation.png') }}'))
+
         var members = dataToLayer(jsonData, 'member', (feature) => {
             return `<b>akt. Mitglied</b><br>
                     <b>Name: </b>${feature.properties.name}<br>
                     <b>Einheit: </b>${feature.properties.unit}<br>`
-        })
-        var coverageAreas = dataToLayer(jsonData, 'coverageArea')
+        }, (feature) => genIcon('{{ asset('images/markers/member.png') }}'))
+
+        var coverageAreas = dataToLayer(jsonData, 'coverageArea', (feature) => genIcon('{{ asset('images/markers/blank.png') }}'))
 
         occasions.addTo(map)
         firestations.addTo(map)
