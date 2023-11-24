@@ -7,7 +7,12 @@
                 <legend>angezeigte Elemente:</legend>
                 {% for label, group in toggleableElements %}
                     <div>
-                        <input type="checkbox" id="checkbox_{{ group }}" name="{{ group }}" checked />
+                        <input
+                                type="checkbox"
+                                id="checkbox_{{ group }}"
+                                onclick="mapToggleCheckbox(event);"
+                                name="{{ group }}"
+                                checked />
                         <label for="{{ group }}">{{ label }}</label>
                     </div>
                 {% endfor %}
@@ -16,7 +21,12 @@
                 <legend>Funktionen:</legend>
                 {% for label, group in toggleableUnits %}
                     <div>
-                        <input type="checkbox" id="checkbox_{{ group }}" name="{{ group }}" checked />
+                        <input
+                                type="checkbox"
+                                id="checkbox_{{ group }}"
+                                onclick="functionToggleCheckbox(event);"
+                                name="{{ group }}"
+                                checked />
                         <label for="{{ group }}">{{ label }}</label>
                     </div>
                 {% endfor %}
@@ -27,6 +37,12 @@
             <fieldset>
                 <legend>Ankunftszeit Mitglieder:</legend>
                 <legend>Hilfsfrist eingehalten:</legend>
+                <input
+                        type="checkbox"
+                        id="checkbox_deadline"
+                        onclick="deadlineToggleCheckbox(event);"
+                        name="deadlienFulfilled"
+                        checked />
             </fieldset>
         </div>
         <div id="dispatcher-map" class="block h-full"></div>
@@ -180,7 +196,7 @@
                         "marker-color": "#ff8800",
                         "marker-size": "medium",
                         "marker-symbol": "circle",
-                        "deadlineFulfilled": "true"
+                        "deadlineFulfilled": true
                     },
                     "geometry": {
                         "coordinates": [
@@ -196,7 +212,7 @@
                     "properties": {
                         "type": "occasion",
                         "occasionType": "help",
-                        "deadlineFulfilled": "false",
+                        "deadlineFulfilled": false,
                         "marker-color": "#9900ff",
                         "marker-size": "medium",
                         "marker-symbol": "circle"
@@ -216,10 +232,28 @@
     <script>
         var map = L.map('dispatcher-map');
 
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        window.filterProps = {
+            types: ["occasions", "firestations", "members", "coverageAreas"],
+            units: [],
+            functions: [],
+            eventOccasionStart: null,
+            eventOccasionEnd: null,
+            memberArrivalMinTime: 0,
+            memberArrivalMaxTime: null,
+            deadlineFulfilled: true
+        }
+
+        let layers = {
+            occasions: undefined,
+            firestations: undefined,
+            members: undefined,
+            coverageAreas: undefined
+        }
+
+        let tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
+        });
 
         var jsonData = demoData;
 
@@ -231,11 +265,9 @@
             })
         }
 
-        function dataToLayer(data, type, popupTextFunction, fIcon, customFilter = (f, l) => true) {
+        function dataToLayer(data, type, popupTextFunction, fIcon, filterProps = {}) {
             return L.geoJSON(data, {
-                filter: function(feature, layer) {
-                    return feature.properties.type === type && customFilter(feature, layer)
-                },
+                filter: constructFilter(type, filterProps),
                 pointToLayer: function(feature, latlong) {
                     return L.marker(latlong, {
                         icon: fIcon(feature)
@@ -246,47 +278,91 @@
             })
         }
 
-        function mapToggleCheckbox(checkboxId, layer) {
-            document.getElementById(checkboxId).addEventListener("click", (e) => {
-                e.target.checked ? layer.addTo(map) : layer.removeFrom(map);
+        function mapToggleCheckbox(event) {
+            event.target.checked ? window.filterProps.types.push(event.target.name) :
+                window.filterProps.types = window.filterProps.types.filter((name) => event.target.name !== name)
+            renderData()
+        }
+
+        function functionToggleCheckbox(event) {
+            event.target.checked ? window.filterProps.functions.push(event.target.name) :
+                window.filterProps.functions = window.filterProps.functions.filter((name) => event.target.name !== name)
+            renderData()
+        }
+
+        function unitToggleCheckbox(event) {
+            event.target.checked ? window.filterProps.units.push(event.target.name) :
+                window.filterProps.units = window.filterProps.units.filter((name) => event.target.name !== name)
+            renderData()
+        }
+
+        function deadlineToggleCheckbox(event) {
+            window.filterProps.deadlineFulfilled = event.target.checked
+            renderData()
+        }
+
+        function constructFilter(type) {
+            return (feature, layer) => {
+                let functFilter, unitFilter, deadlineFilter = true;
+                if (feature.properties.type === 'member') {
+                    functFilter = window.filterProps.unit ?
+                        feature.properties.unit === window.filterProps.unit : true;
+                    functFilter = window.filterProps.funct ?
+                        feature.properties.funct === window.filterProps.funct : true;
+                }
+                if (feature.properties.type === 'occasion') {
+                    deadlineFilter = feature.properties.deadlineFulfilled === window.filterProps.deadlineFulfilled;
+                }
+                return feature.properties.type === type && deadlineFilter;
+                //  && functFilter && unitFilter && deadlineFilter
+            }
+        }
+
+        function renderData() {
+            layers.occasions = dataToLayer(jsonData, 'occasion', (feature) => {
+                return `<b>Einsatz</b><br>
+                    <b>Art des Einsatzes: </b>${feature.properties.occasionType}<br>
+                    <b>Hilfsfrist eing.: </b>${JSON.parse(feature.properties.deadlineFulfilled) ? "Ja" : "Nein"}`
+            }, (feature) => {
+                if (feature.properties.occasionType == 'fire') {
+                    return genIcon('{{ asset('images/markers/occasion_fire.png') }}')
+                } else {
+                    return genIcon('{{ asset('images/markers/occasion_help.png') }}')
+                }
+            }, constructFilter("occasion"))
+
+            layers.firestations = dataToLayer(jsonData, 'firestation',  (feature) => {
+                    return `<b>Feuerwehrhaus</b>`
+                }, (feature) => genIcon('{{ asset('images/markers/firestation.png') }}'),
+                constructFilter("firestation"))
+
+            layers.members = dataToLayer(jsonData, 'member', (feature) => {
+                    return `<b>akt. Mitglied</b><br>
+                    <b>Name: </b>${feature.properties.name}<br>
+                    <b>Einheit: </b>${feature.properties.unit}<br>`
+                }, (feature) => genIcon('{{ asset('images/markers/member.png') }}'),
+                constructFilter("member"))
+
+            layers.coverageAreas = dataToLayer(jsonData, 'coverageArea', (feature) => genIcon('{{ asset('images/markers/blank.png') }}'), constructFilter("coverageArea"))
+
+            // since leaflet does not parse the layer reference correctly, this is a workaround
+            // TODO fix
+            map.eachLayer(function (layer) {
+                map.removeLayer(layer)
+            });
+            map.addLayer(tiles)
+
+            for (const [layerName, layer] of Object.entries(layers)) {
+                filterProps.types.find((e) => e === layerName) ?
+                    map.addLayer(layer) :
+                    map.removeLayer(layer)
+            }
+
+            map.fitBounds(L.geoJSON(jsonData).getBounds(), {
+                padding: [50, 50]
             })
         }
 
-        var occasions = dataToLayer(jsonData, 'occasion', (feature) => {
-            return `<b>Einsatz</b><br>
-                    <b>Art des Einsatzes: </b>${feature.properties.occasionType}<br>
-                    <b>Hilfsfrist eing.: </b>${JSON.parse(feature.properties.deadlineFulfilled) ? "Ja" : "Nein"}`
-        }, (feature) => {
-            if (feature.properties.occasionType == 'fire') {
-                return genIcon('{{ asset('images/markers/occasion_fire.png') }}')
-            } else {
-                return genIcon('{{ asset('images/markers/occasion_help.png') }}')
-            }
-        })
-
-        var firestations = dataToLayer(jsonData, 'firestation',  (feature) => {
-            return `<b>Feuerwehrhaus</b>`
-        }, (feature) => genIcon('{{ asset('images/markers/firestation.png') }}'))
-
-        var members = dataToLayer(jsonData, 'member', (feature) => {
-            return `<b>akt. Mitglied</b><br>
-                    <b>Name: </b>${feature.properties.name}<br>
-                    <b>Einheit: </b>${feature.properties.unit}<br>`
-        }, (feature) => genIcon('{{ asset('images/markers/member.png') }}'))
-
-        var coverageAreas = dataToLayer(jsonData, 'coverageArea', (feature) => genIcon('{{ asset('images/markers/blank.png') }}'))
-
-        occasions.addTo(map)
-        firestations.addTo(map)
-        members.addTo(map)
-        coverageAreas.addTo(map)
-
-        {% for label, group in toggleableElements %}
-        mapToggleCheckbox("checkbox_{{ group }}", {{ group }});
-        {% endfor %}
-
-        map.fitBounds(L.geoJSON(jsonData).getBounds(), {
-            padding: [50, 50]
-        })
+        renderData()
     </script>
 {% endblock %}
