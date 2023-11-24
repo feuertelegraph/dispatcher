@@ -1,51 +1,83 @@
-{% extends 'layouts/default.html.twig' %}
+{% extends 'layouts/screenfill.html.twig' %}
+
+{% set boxClasses = "bg-gray-300 rounded-xl shadow-lg" %}
 
 {% block content %}
-    <div class="flex flex-col h-full">
-        <div id="dispatcher-map-toolbar" class="bg-gray-300 block p-1 flex justify-start gap-4">
-            <fieldset>
-                <legend>angezeigte Elemente:</legend>
-                {% for label, group in toggleableElements %}
-                    <div>
+    <div class="relative h-full">
+        <div id="dispatcher-map" class="block h-full"></div>
+        <div id="dispatcher-map-toolbar" class="block p-4 flex flex-col justify-start gap-4 absolute top-0 right-0" style="z-index: 10000;">
+            <div class="{{ boxClasses }}">
+                <h3 class="text-lg font-bold text-dp-orange bg-gray-200 p-1.5 border-b-2 border-dp-orange">Legende</h3>
+                <ul class="flex w-full flex-col gap-2 px-1.5 py-2">
+                    {% for label, group in toggleableElements %}
+                    <li>
                         <input
                                 type="checkbox"
                                 id="checkbox_{{ group }}"
                                 onclick="mapToggleCheckbox(event);"
+                                class="hidden peer"
                                 name="{{ group }}"
                                 checked />
-                        <label for="{{ group }}">{{ label }}</label>
-                    </div>
-                {% endfor %}
-            </fieldset>
-            <fieldset>
-                <legend>Funktionen:</legend>
-                {% for label, group in toggleableUnits %}
-                    <div>
-                        <input
-                                type="checkbox"
-                                id="checkbox_{{ group }}"
-                                onclick="functionToggleCheckbox(event);"
-                                name="{{ group }}"
-                                checked />
-                        <label for="{{ group }}">{{ label }}</label>
-                    </div>
-                {% endfor %}
-            </fieldset>
-            <fieldset>
-                <legend>Abteilungen:</legend>
-            </fieldset>
-            <fieldset>
-                <legend>Ankunftszeit Mitglieder:</legend>
-                <legend>Hilfsfrist eingehalten:</legend>
-                <input
-                        type="checkbox"
-                        id="checkbox_deadline"
-                        onclick="deadlineToggleCheckbox(event);"
-                        name="deadlienFulfilled"
-                        checked />
-            </fieldset>
+                        <label for="checkbox_{{ group }}" class="rounded-lg inline-flex items-center justify-between w-full py-1 px-2 bg-gray-100
+                         border-2 border-gray-200 cursor-pointer select-none peer-checked:border-dp-orange-600 hover:text-dp-orange hover:bg-gray-50">
+                            <div class="block">
+                                {{ label }}
+                            </div>
+                        </label>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="{{ boxClasses }}">
+                <h3 class="text-lg font-bold text-dp-orange bg-gray-200 p-1.5 border-b-2 border-dp-orange">Positionen</h3>
+                <ul class="grid grid-cols-2 w-full gap-2 px-1.5 py-2">
+                    {% for label, group in toggleableUnits %}
+                        <li>
+                            <input
+                                    type="checkbox"
+                                    id="checkbox_{{ group }}"
+                                    onclick="mapToggleCheckbox(event);"
+                                    class="hidden peer"
+                                    name="{{ group }}"
+                                    checked />
+                            <label for="checkbox_{{ group }}" class="rounded-lg inline-flex items-center justify-between w-full py-1 px-2 bg-gray-100
+                         border-2 border-gray-200 cursor-pointer select-none peer-checked:border-dp-orange-600 hover:text-dp-orange hover:bg-gray-50">
+                                <div class="block">
+                                    {{ label }}
+                                </div>
+                            </label>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="{{ boxClasses }}">
+                <h3 class="text-lg font-bold text-dp-orange bg-gray-200 p-1.5 border-b-2 border-dp-orange">Abteilungen</h3>
+            </div>
+            <div class="{{ boxClasses }}">
+                <h3 class="text-lg font-bold text-dp-orange bg-gray-200 p-1.5 border-b-2 border-dp-orange">Ankunftszeit Mitglieder</h3>
+                <div class="p-1.5">
+                    <input id="default-range" type="range" value="50" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-400">
+                </div>
+            </div>
+            <div class="{{ boxClasses }}">
+                <h3 class="text-lg font-bold text-dp-orange bg-gray-200 p-1.5 border-b-2 border-dp-orange">Hilfsfrist</h3>
+                <div class="p-1.5">
+                    <input
+                            type="checkbox"
+                            id="checkbox_deadline"
+                            onclick="deadlineToggleCheckbox(event);"
+                            class="hidden peer"
+                            name="checkbox_deadline"
+                            checked />
+                    <label for="checkbox_deadline" class="rounded-lg inline-flex items-center justify-between w-full py-1 px-2 bg-gray-100
+                             border-2 border-gray-200 cursor-pointer select-none peer-checked:border-dp-orange-600 hover:text-dp-orange hover:bg-gray-50">
+                        <div class="block">
+                            Hilfsfrist eing.
+                        </div>
+                    </label>
+                </div>
+            </div>
         </div>
-        <div id="dispatcher-map" class="block h-full"></div>
     </div>
     <script>
 
