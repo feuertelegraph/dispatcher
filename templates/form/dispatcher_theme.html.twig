@@ -87,3 +87,43 @@
     class="{{ button.buttonClass("success") }}"
     {{- parent() -}}
 {%- endblock button_attributes -%}
+
+{%- block geo_fence_widget -%}
+    <input type="hidden" {{ block('widget_attributes') }}>
+    <div id="geofence-input-map" class="block h-96 w-full"></div>
+    <script>
+        const input = document.getElementById("{{ id }}")
+        let map = L.map('geofence-input-map', { pmIgnore: false }).setView([51.505, -0.09], 13);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        function renderGeoJSON(e) {
+            let geomanFeatures = L.featureGroup();
+            map.eachLayer((layer)=>{
+                if(layer instanceof L.Polygon){
+                    geomanFeatures.addLayer(layer);
+                }
+            });
+            input.value = JSON.stringify(geomanFeatures.toGeoJSON())
+            console.log(geomanFeatures.toGeoJSON());
+        }
+
+        map.pm.addControls({
+            position: 'topleft',
+            drawMarker: false,
+            drawCircleMarker: false,
+            drawPolyline: false,
+            drawRectangle: false,
+            drawCircle: false,
+            drawText: false,
+            rotateMode: false,
+        });
+
+        map.on("pm:create", renderGeoJSON);
+        map.on("pm:edit", renderGeoJSON);
+
+        map.pm.enableGlobalEditMode()
+    </script>
+{%- endblock -%}

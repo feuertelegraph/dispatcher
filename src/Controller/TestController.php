@@ -2,6 +2,7 @@
 
 namespace Feuertelegraph\Controller;
 
+use App\Form\Type\GeoFenceType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -80,6 +81,7 @@ class TestController extends AbstractController
                 'choices'  => $choiceOptions,
                 'expanded' => true
             ])
+            ->add('geofence', GeoFenceType::class)
             ->add('save', SubmitType::class, ['label' => 'Submit'])
             ->getForm();
 

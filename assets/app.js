@@ -14,7 +14,12 @@ import '@fontsource-variable/open-sans';
 
 // leaflet
 import "leaflet/dist/leaflet.css";
-import "./scripts/leaflet";
-global.L = require('leaflet')
-window.L = require('leaflet')
+import * as L from "leaflet";
+
+import "@geoman-io/leaflet-geoman-free";
+import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
+L.PM.setOptIn(true);
+
+global.L = L
+window.L = L
 

@@ -28,6 +28,7 @@
     "dependencies": {
         "@fontsource-variable/open-sans": "^5.0.16",
         "@fontsource-variable/work-sans": "^5.0.14",
+        "@geoman-io/leaflet-geoman-free": "^2.14.2",
         "leaflet": "^1.9.4"
     }
 }
