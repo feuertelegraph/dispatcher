@@ -99,9 +99,11 @@
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
+        let features = L.layerGroup([]).addTo(map);
+
         function renderGeoJSON(e) {
             let geomanFeatures = L.featureGroup();
-            map.eachLayer((layer)=>{
+            features.eachLayer((layer)=>{
                 if(layer instanceof L.Polygon){
                     geomanFeatures.addLayer(layer);
                 }
@@ -119,11 +121,19 @@
             drawCircle: false,
             drawText: false,
             rotateMode: false,
+            cutPolygon: false
         });
 
         map.on("pm:create", renderGeoJSON);
         map.on("pm:edit", renderGeoJSON);
 
-        map.pm.enableGlobalEditMode()
+        map.pm.setGlobalOptions({
+            layerGroup: features
+        })
+
+        map.pm.enableDraw("Polygon", {
+            snappable: true,
+            snapDistance: 20,
+        });
     </script>
 {%- endblock -%}
