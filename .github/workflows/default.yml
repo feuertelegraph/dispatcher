@@ -8,4 +8,4 @@ on:
 
 jobs:
   default: 
-    uses: ./.github/workflows/buildAndTest.yaml
+    uses: ./.github/workflows/buildAndTest.yml

@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   buildAndTest:
-    uses: ./.github/workflows/buildAndTest.yaml
+    uses: ./.github/workflows/buildAndTest.yml
 
   deploy:
     needs: buildAndTest
